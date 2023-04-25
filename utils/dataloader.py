@@ -1,5 +1,5 @@
 import random
-
+from loguru import logger
 import cv2
 import numpy as np
 import torch
@@ -38,10 +38,10 @@ class SiameseDataset(Dataset):
         #------------------------------------------#
         #   首先选取三张类别相同的图片
         #------------------------------------------#
-        c               = random.randint(0, self.types - 1)
+        c               = random.randint(0, self.types)
         selected_path   = self.train_lines[self.train_labels[:] == c]
         while len(selected_path)<3:
-            c               = random.randint(0, self.types - 1)
+            c               = random.randint(0, self.types)
             selected_path   = self.train_lines[self.train_labels[:] == c]
 
         image_indexes = random.sample(range(0, len(selected_path)), 3)
@@ -59,16 +59,17 @@ class SiameseDataset(Dataset):
         #------------------------------------------#
         #   取出与当前的小类别不同的类
         #------------------------------------------#
-        different_c         = list(range(self.types))
+        different_c         = list(range(self.types + 1))
         different_c.pop(c)
-        different_c_index   = np.random.choice(range(0, self.types - 1), 1)
+        # print(different_c)
+        different_c_index   = np.random.choice(range(0, self.types), 1)
         current_c           = different_c[different_c_index[0]]
         selected_path       = self.train_lines[self.train_labels == current_c]
         while len(selected_path)<1:
-            different_c_index   = np.random.choice(range(0, self.types - 1), 1)
+            different_c_index   = np.random.choice(range(0, self.types), 1)
             current_c           = different_c[different_c_index[0]]
             selected_path       = self.train_lines[self.train_labels == current_c]
-
+        
         image_indexes = random.sample(range(0, len(selected_path)), 1)
         batch_images_path.append(selected_path[image_indexes[0]])
         
