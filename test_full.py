@@ -68,8 +68,6 @@ if __name__ == "__main__":
         for img_name in imgs:
             img = Image.open(os.path.join(dir, img_name))
             img = img.resize((256, 256), Image.LANCZOS)
-            
-            
             probability = model.detect_image(ref_img, img).item()
             score = 1 - probability
             scores.append(score)
