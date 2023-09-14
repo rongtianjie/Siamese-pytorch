@@ -62,7 +62,7 @@ if __name__ == "__main__":
         focused_img_path = os.path.join(sub_folder, focused_img_name)
         
         focused_img = cv2.imdecode(np.fromfile(focused_img_path, dtype=np.uint8), cv2.IMREAD_COLOR)
-        focused_img = cv2.resize(focused_img, IMAGE_SIZE)
+        focused_img = cv2.resize(focused_img, IMAGE_SIZE, interpolation=cv2.INTER_AREA)
         
         candidates = [f for f in os.listdir(sub_folder) if (f.endswith(".bmp") and f != focused_img_name)]
                 
